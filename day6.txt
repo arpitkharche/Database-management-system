@@ -1,0 +1,496 @@
+
+mysql> select * from location;
++-------+-----------+------------+
+| locid | city      | addr       |
++-------+-----------+------------+
+|     1 | mumbai    | mbp        |
+|     2 | banglore  | itpl       |
+|     3 | pune      | hinjewadi  |
+|     4 | gurgaon   | dlf2       |
+|     5 | hydrabaad | hitechcity |
++-------+-----------+------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from dept;
++--------+------------+-------+
+| deptid | dname      | locid |
++--------+------------+-------+
+|    101 | sales      |     1 |
+|    102 | hr         |     3 |
+|    103 | finance    |     2 |
+|    104 | mktg       |     3 |
+|    105 | ops        |     4 |
+|    106 | it         |     4 |
+|    107 | traveldesk |  NULL |
++--------+------------+-------+
+7 rows in set (0.00 sec)
+
+mysql> select * from emp;
++-------+--------+-----------+--------+-------+----------+
+| empid | fname  | lname     | deptid | mrgid | salary   |
++-------+--------+-----------+--------+-------+----------+
+|  1001 | steven | king      |    105 |  NULL | 50000.00 |
+|  1002 | neena  | kochhar   |    105 |  1003 | 40000.00 |
+|  1003 | nancy  | greenberg |    102 |  1001 | 35000.00 |
+|  1004 | andrew | lusk      |    101 |  1002 | 15000.00 |
+|  1005 | pamela | davis     |   NULL |  1002 | 14000.00 |
+|  1006 | andy   | hillman   |    105 |  1001 | 30000.00 |
+|  1007 | rene   | lopez     |    105 |  1001 | 18000.00 |
+|  1008 | tanya  | rff       |    105 |  1001 | 10000.00 |
+|  1009 | sue    | fisher    |    105 |  1001 | 11000.00 |
++-------+--------+-----------+--------+-------+----------+
+9 rows in set (0.00 sec)
+
+mysql> select dname,city,addr from dept inner join locationon dept.locid = location.locid;
+ERROR 1066 (42000): Not unique table/alias: 'dept'
+mysql> select dname,city,addr from dept inner join location on dept.locid = location.locid;
++---------+----------+-----------+
+| dname   | city     | addr      |
++---------+----------+-----------+
+| sales   | mumbai   | mbp       |
+| finance | banglore | itpl      |
+| hr      | pune     | hinjewadi |
+| mktg    | pune     | hinjewadi |
+| ops     | gurgaon  | dlf2      |
+| it      | gurgaon  | dlf2      |
++---------+----------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select dname,city,addr from dept left outer join location on dept.locid = location.locid;
++------------+----------+-----------+
+| dname      | city     | addr      |
++------------+----------+-----------+
+| sales      | mumbai   | mbp       |
+| hr         | pune     | hinjewadi |
+| finance    | banglore | itpl      |
+| mktg       | pune     | hinjewadi |
+| ops        | gurgaon  | dlf2      |
+| it         | gurgaon  | dlf2      |
+| traveldesk | NULL     | NULL      |
++------------+----------+-----------+
+7 rows in set (0.00 sec)
+
+mysql> select dname,city,addr from dept right outer join location on dept.locid = location.locid;
++---------+-----------+------------+
+| dname   | city      | addr       |
++---------+-----------+------------+
+| sales   | mumbai    | mbp        |
+| finance | banglore  | itpl       |
+| hr      | pune      | hinjewadi  |
+| mktg    | pune      | hinjewadi  |
+| ops     | gurgaon   | dlf2       |
+| it      | gurgaon   | dlf2       |
+| NULL    | hydrabaad | hitechcity |
++---------+-----------+------------+
+7 rows in set (0.00 sec)
+
+mysql> select dname,city,addr from location right outer join dept on dept.locid = location.locid;
++------------+----------+-----------+
+| dname      | city     | addr      |
++------------+----------+-----------+
+| sales      | mumbai   | mbp       |
+| hr         | pune     | hinjewadi |
+| finance    | banglore | itpl      |
+| mktg       | pune     | hinjewadi |
+| ops        | gurgaon  | dlf2      |
+| it         | gurgaon  | dlf2      |
+| traveldesk | NULL     | NULL      |
++------------+----------+-----------+
+7 rows in set (0.00 sec)
+
+mysql> s
+    ->
+    -> b
+    -> ;\
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 's
+
+b' at line 1
+mysql> select dname,city,addr from dept right outer join location on dept.locid = location.locid where dname is null;
++-------+-----------+------------+
+| dname | city      | addr       |
++-------+-----------+------------+
+| NULL  | hydrabaad | hitechcity |
++-------+-----------+------------+
+1 row in set (0.02 sec)
+
+mysql> select dname,city,addr from dept right outer join location on dept.locid = location.locid where dname is not null;
++---------+----------+-----------+
+| dname   | city     | addr      |
++---------+----------+-----------+
+| sales   | mumbai   | mbp       |
+| finance | banglore | itpl      |
+| hr      | pune     | hinjewadi |
+| mktg    | pune     | hinjewadi |
+| ops     | gurgaon  | dlf2      |
+| it      | gurgaon  | dlf2      |
++---------+----------+-----------+
+6 rows in set (0.00 sec)
+
+mysql> select dname,city,addr from dept left outer join location on dept.locid = location.locid where city is null;
++------------+------+------+
+| dname      | city | addr |
++------------+------+------+
+| traveldesk | NULL | NULL |
++------------+------+------+
+1 row in set (0.00 sec)
+
+mysql> select dname,city,addr from dept right outer join location on dept.locid = location.locid where city is null;
+Empty set (0.00 sec)
+
+mysql> selct dname ,city,addr from dept inner join locationon dept.locid = location.locid where city='gurgaon;
+    '> select dname,city,addr from dept right outer join location on dept.locid = location.locid where city is null;\
+    '>
+    '> w3;
+    '> ;'
+    -> '
+    '> ';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct dname ,city,addr from dept inner join locationon dept.locid = location.loc' at line 1
+mysql> selct dname ,city,addr from dept inner join locationon dept.locid = location.locid where city='gurgaon';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct dname ,city,addr from dept inner join locationon dept.locid = location.loc' at line 1
+mysql> selct dname ,city,addr from dept inner join location on dept.locid = location.locid where city='gurgaon';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'selct dname ,city,addr from dept inner join location on dept.locid = location.lo' at line 1
+mysql> select dname ,city,addr from dept inner join location on dept.locid = location.locid where city='gurgaon';
++-------+---------+------+
+| dname | city    | addr |
++-------+---------+------+
+| ops   | gurgaon | dlf2 |
+| it    | gurgaon | dlf2 |
++-------+---------+------+
+2 rows in set (0.00 sec)
+
+mysql> select dname,fname,lname,city,addr from dept inner join location on dept.locid = location.locid inner join emp on dept.deptid=emp.deptid;
++-------+--------+-----------+---------+-----------+
+| dname | fname  | lname     | city    | addr      |
++-------+--------+-----------+---------+-----------+
+| sales | andrew | lusk      | mumbai  | mbp       |
+| hr    | nancy  | greenberg | pune    | hinjewadi |
+| ops   | steven | king      | gurgaon | dlf2      |
+| ops   | neena  | kochhar   | gurgaon | dlf2      |
+| ops   | andy   | hillman   | gurgaon | dlf2      |
+| ops   | rene   | lopez     | gurgaon | dlf2      |
+| ops   | tanya  | rff       | gurgaon | dlf2      |
+| ops   | sue    | fisher    | gurgaon | dlf2      |
++-------+--------+-----------+---------+-----------+
+8 rows in set (0.00 sec)
+
+mysql> select dname,concat(fname, ' ',lname) as name,city,addr from dept inner join location on dept.locid = location.locid inner join emp on dept.deptid=emp.deptid;
++-------+-----------------+---------+-----------+
+| dname | name            | city    | addr      |
++-------+-----------------+---------+-----------+
+| sales | andrew lusk     | mumbai  | mbp       |
+| hr    | nancy greenberg | pune    | hinjewadi |
+| ops   | steven king     | gurgaon | dlf2      |
+| ops   | neena kochhar   | gurgaon | dlf2      |
+| ops   | andy hillman    | gurgaon | dlf2      |
+| ops   | rene lopez      | gurgaon | dlf2      |
+| ops   | tanya rff       | gurgaon | dlf2      |
+| ops   | sue fisher      | gurgaon | dlf2      |
++-------+-----------------+---------+-----------+
+8 rows in set (0.03 sec)
+
+mysql> select dname,concat(fname, ' ',lname) as employee name,city,addr from dept inner join location on dept.locid = location.locid inner join emp on dept.deptid=emp.deptid;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'name,city,addr from dept inner join location on dept.locid = location.locid inne' at line 1
+mysql> select dname,concat(fname, ' ',lname) as employee_name,city,addr from dept inner join location on dept.locid = location.locid inner join emp on dept.deptid=emp.deptid;
++-------+-----------------+---------+-----------+
+| dname | employee_name   | city    | addr      |
++-------+-----------------+---------+-----------+
+| sales | andrew lusk     | mumbai  | mbp       |
+| hr    | nancy greenberg | pune    | hinjewadi |
+| ops   | steven king     | gurgaon | dlf2      |
+| ops   | neena kochhar   | gurgaon | dlf2      |
+| ops   | andy hillman    | gurgaon | dlf2      |
+| ops   | rene lopez      | gurgaon | dlf2      |
+| ops   | tanya rff       | gurgaon | dlf2      |
+| ops   | sue fisher      | gurgaon | dlf2      |
++-------+-----------------+---------+-----------+
+8 rows in set (0.00 sec)
+
+mysql> select dname,concat(fname, ' ',lname) as name,city,addr from dept inner join location on dept.locid = location.locid inner join emp on dept.deptid=emp.deptid;
++-------+-----------------+---------+-----------+
+| dname | name            | city    | addr      |
++-------+-----------------+---------+-----------+
+| sales | andrew lusk     | mumbai  | mbp       |
+| hr    | nancy greenberg | pune    | hinjewadi |
+| ops   | steven king     | gurgaon | dlf2      |
+| ops   | neena kochhar   | gurgaon | dlf2      |
+| ops   | andy hillman    | gurgaon | dlf2      |
+| ops   | rene lopez      | gurgaon | dlf2      |
+| ops   | tanya rff       | gurgaon | dlf2      |
+| ops   | sue fisher      | gurgaon | dlf2      |
++-------+-----------------+---------+-----------+
+8 rows in set (0.00 sec)
+
+mysql> select d.dname,concat(e.fname, ' ',e.lname) as name,l.city,l.addr from dept d inner join location l on d.locid = l.locid inner join emp e on d.deptid=e.deptid;
++-------+-----------------+---------+-----------+
+| dname | name            | city    | addr      |
++-------+-----------------+---------+-----------+
+| sales | andrew lusk     | mumbai  | mbp       |
+| hr    | nancy greenberg | pune    | hinjewadi |
+| ops   | steven king     | gurgaon | dlf2      |
+| ops   | neena kochhar   | gurgaon | dlf2      |
+| ops   | andy hillman    | gurgaon | dlf2      |
+| ops   | rene lopez      | gurgaon | dlf2      |
+| ops   | tanya rff       | gurgaon | dlf2      |
+| ops   | sue fisher      | gurgaon | dlf2      |
++-------+-----------------+---------+-----------+
+8 rows in set (0.01 sec)
+
+mysql> insert into emp values(1005 ,'pamela','davis',null,1002);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> select d.dname ,concat(e.fname,' ',e.lname)as empname from dept d right outer join emp e on d.deptid =e.deptid;
++-------+-----------------+
+| dname | empname         |
++-------+-----------------+
+| ops   | steven king     |
+| ops   | neena kochhar   |
+| hr    | nancy greenberg |
+| sales | andrew lusk     |
+| NULL  | pamela davis    |
+| ops   | andy hillman    |
+| ops   | rene lopez      |
+| ops   | tanya rff       |
+| ops   | sue fisher      |
++-------+-----------------+
+9 rows in set (0.00 sec)
+
+mysql> select concat (emp.fname,' ',emp.lname) as empname,concat (mgr.fname,' ',mgr.lname) as mgrname from emp emp inner join emp mgr on emp.mgrid = mgr.empid;
+ERROR 1054 (42S22): Unknown column 'emp.mgrid' in 'on clause'
+mysql> select concat (emp.fname,' ',emp.lname) as empname,concat (mrg.fname,' ',mrg.lname) as mrgname from emp emp inner join emp mrg on emp.mrgid = mrg.empid;
++-----------------+-----------------+
+| empname         | mrgname         |
++-----------------+-----------------+
+| neena kochhar   | nancy greenberg |
+| nancy greenberg | steven king     |
+| andrew lusk     | neena kochhar   |
+| pamela davis    | neena kochhar   |
+| andy hillman    | steven king     |
+| rene lopez      | steven king     |
+| tanya rff       | steven king     |
+| sue fisher      | steven king     |
++-----------------+-----------------+
+8 rows in set (0.00 sec)
+
+mysql> select concat (emp.fname,' ',emp.lname) as empname,concat (mrg.fname,' ',mrg.lname) as mrgname from emp emp left outer join emp mrg on emp.mrgid = mrg.empid;
++-----------------+-----------------+
+| empname         | mrgname         |
++-----------------+-----------------+
+| steven king     | NULL            |
+| neena kochhar   | nancy greenberg |
+| nancy greenberg | steven king     |
+| andrew lusk     | neena kochhar   |
+| pamela davis    | neena kochhar   |
+| andy hillman    | steven king     |
+| rene lopez      | steven king     |
+| tanya rff       | steven king     |
+| sue fisher      | steven king     |
++-----------------+-----------------+
+9 rows in set (0.00 sec)
+
+mysql> select concat (emp.fname,' ',emp.lname) as empname,concat (mrg.fname,' ',mrg.lname) as mrgname from emp emp left outer join emp mrg on emp.mrgid = mrg.empid where mrgname is null;
+ERROR 1054 (42S22): Unknown column 'mrgname' in 'where clause'
+mysql> select concat (emp.fname,' ',emp.lname) as empname,concat (mrg.fname,' ',mrg.lname) as mrgname from emp emp left outer join emp mrg on emp.mrgid = mrg.empid where emp.mrgid is null;
++-------------+---------+
+| empname     | mrgname |
++-------------+---------+
+| steven king | NULL    |
++-------------+---------+
+1 row in set (0.00 sec)
+
+mysql> select concat (emp.fname,' ',emp.lname) as empname,concat (mrg.fname,' ',mrg.lname) as mrgname from emp emp left outer join emp mrg on emp.mrgid = mrg.empid where emp.deptid is null;
++--------------+---------------+
+| empname      | mrgname       |
++--------------+---------------+
+| pamela davis | neena kochhar |
++--------------+---------------+
+1 row in set (0.00 sec)
+
+mysql> select concat (emp.fname,' ',emp.lname) as empname from emp where salary=max(salary);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select concat (emp.fname,' ',emp.lname) as empname from emp where salary = max(salary);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select concat (emp.fname,' ',emp.lname) as empname from emp  salary = max(salary);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= max(salary)' at line 1
+mysql> select concat (emp.fname,' ',emp.lname) as empname from emp  max(salary);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'max(salary)' at line 1
+mysql> select concat (emp.fname,' ',emp.lname) as empname from emp where =(select max(salary) from emp);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=(select max(salary) from emp)' at line 1
+mysql> select concat (fname,' ',lname) as empname from emp where =(select max(salary) from emp);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=(select max(salary) from emp)' at line 1
+mysql> select concat (fname,' ',lname) as empname from emp where salary =(select max(salary) from emp);
++-------------+
+| empname     |
++-------------+
+| steven king |
++-------------+
+1 row in set (0.03 sec)
+
+mysql> select concat (fname,' ',lname) as empname,salary from emp where salary =(select max(salary) from emp);
++-------------+----------+
+| empname     | salary   |
++-------------+----------+
+| steven king | 50000.00 |
++-------------+----------+
+1 row in set (0.00 sec)
+
+mysql> select concat (fname,' ',lname) as empname,salary from emp where salary =(select max(salary) from emp where salary<(select max(salary) from emp));
++---------------+----------+
+| empname       | salary   |
++---------------+----------+
+| neena kochhar | 40000.00 |
++---------------+----------+
+1 row in set (0.00 sec)
+
+mysql> select concat(fname,' ',lname)as empname from emp where salary=(select max(salary) from emp where salary<(select max(salary)from emp));
++---------------+
+| empname       |
++---------------+
+| neena kochhar |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> select concat(fname,' ',lname)as empname from emp order by salary desc limit1,1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'limit1,1' at line 1
+mysql> select concat(fname,' ',lname)as empname from emp order by salary desc 'limit1,1';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''limit1,1'' at line 1
+mysql> select concat(fname,' ',lname)as empname from emp where salary=(select salary from emp order by salary desc 'limit1,1';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''limit1,1'' at line 1
+mysql> select concat(fname,' ',lname)as empname from emp where salary=(select salary from emp order by salary desc limit1,1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'limit1,1' at line 1
+mysql> select concat(fname,' ',lname)as empname from emp where salary=(select salary from emp order by salary desc limit1,1);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'limit1,1)' at line 1
+mysql> select concat(fname,' ',lname)as empname from emp where salary=(select salary from emp order by salary desc limit 1,1);
++---------------+
+| empname       |
++---------------+
+| neena kochhar |
++---------------+
+1 row in set (0.02 sec)
+
+mysql> select concat(fname,' ',lname)as empname from emp where salary=(select salary from emp order by salary desc limit 3,1);
++--------------+
+| empname      |
++--------------+
+| andy hillman |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select concat(fname,' ',lname)as empname from emp where salary=(select salary from emp order by salary desc limit 3,n);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'n)' at line 1
+mysql> select concat(fname,' ',lname)as empname,e1.salary,count (distinct e2.salary) as rowcnt from emp e1 inner join emp e2 on e1.salary<=e2.salary group by e1.salary concat(e1.fname,' ',e1.lname) having count(distinct e2.salary)=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'distinct e2.salary) as rowcnt from emp e1 inner join emp e2 on e1.salary<=e2.sal' at line 1
+mysql> select concat(fname,' ',lname)as empname,e1.salary,count(distinct e2.salary) as rowcnt from emp e1 inner join emp e2 on e1.salary<=e2.salary group by e1.salary concat(e1.fname,' ',e1.lname) having count(distinct e2.salary)=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'concat(e1.fname,' ',e1.lname) having count(distinct e2.salary)=1' at line 1
+mysql> select concat(fname,' ',lname)as empname,e1.salary,count(distinct e2.salary) as rowcnt from emp e1 inner join emp e2 on e1.salary<=e2.salary group by e1.salary, concat(e1.fname,' ',e1.lname) having count(distinct e2.salary)=1;
+ERROR 1052 (23000): Column 'fname' in field list is ambiguous
+mysql> select concat(e1.fname,' ',e1.lname)as empname,e1.salary,count(distinct e2.salary) as rowcnt from emp e1 inner join emp e2 on e1.salary<=e2.salary group by e1.salary, concat(e1.fname,' ',e1.lname) having count(distinct e2.salary)=1;
++-------------+----------+--------+
+| empname     | salary   | rowcnt |
++-------------+----------+--------+
+| steven king | 50000.00 |      1 |
++-------------+----------+--------+
+1 row in set (0.05 sec)
+
+mysql> select concat(e1.fname,' ',e1.lname)as empname,e1.salary,count(distinct e2.salary) as rowcnt from emp e1 inner join emp e2 on e1.salary<=e2.salary group by e1.salary, concat(e1.fname,' ',e1.lname) having count(distinct e2.salary)=4;
++--------------+----------+--------+
+| empname      | salary   | rowcnt |
++--------------+----------+--------+
+| andy hillman | 30000.00 |      4 |
++--------------+----------+--------+
+1 row in set (0.00 sec)
+
+mysql> select concat(e1.fname,' ',e1.lname)as empname,e1.salary,count(distinct e2.salary) as rowcnt from emp e1 inner join emp e2 on e1.salary<=e2.salary group by e1.salary, concat(e1.fname,' ',e1.lname) having count(distinct e2.salary)=3;
++-----------------+----------+--------+
+| empname         | salary   | rowcnt |
++-----------------+----------+--------+
+| nancy greenberg | 35000.00 |      3 |
++-----------------+----------+--------+
+1 row in set (0.00 sec)
+
+mysql> select concat(fname,' ',lname)as empname,salary from emp where salary>(select avg(salary) from emp);;
++-----------------+----------+
+| empname         | salary   |
++-----------------+----------+
+| steven king     | 50000.00 |
+| neena kochhar   | 40000.00 |
+| nancy greenberg | 35000.00 |
+| andy hillman    | 30000.00 |
++-----------------+----------+
+4 rows in set (0.02 sec)
+
+ERROR:
+No query specified
+
+mysql> select avg(salary) from emp;
++--------------+
+| avg(salary)  |
++--------------+
+| 24777.777778 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select concat (fname,' ',lname)as empname,deptid,salary from emp main where salary > (select avg(salary) from emp where deptid=main.deptid);
++---------------+--------+----------+
+| empname       | deptid | salary   |
++---------------+--------+----------+
+| steven king   |    105 | 50000.00 |
+| neena kochhar |    105 | 40000.00 |
+| andy hillman  |    105 | 30000.00 |
++---------------+--------+----------+
+3 rows in set (0.02 sec)
+
+mysql>select concat(fname,' ',lname)as empname from emp where mrgid = (select mrgid from emp where fname = 'andy' and lname='hillman');
++-----------------+
+| empname         |
++-----------------+
+| nancy greenberg |
+| andy hillman    |
+| rene lopez      |
+| tanya rff       |
+| sue fisher      |
++-----------------+
+5 rows in set (0.00 sec)
+
+mysql> select concat(fname,' ',lname)as empname from emp where mrgid = (select mrgid from emp where fname = 'andy' and lname='hillman') and not (fname='andy' and lname='hillman');
++-----------------+
+| empname         |
++-----------------+
+| nancy greenberg |
+| rene lopez      |
+| tanya rff       |
+| sue fisher      |
++-----------------+
+4 rows in set (0.00 sec)
+
+mysql> select concat (emp.fname,' ',emp.lname) as empname,concat (mgr.fname,' ',mgr.lname) as mgrname from emp emp inner join emp mgr on emp.mgrid = mgr.empid;sdf;
+ERROR 1054 (42S22): Unknown column 'emp.mgrid' in 'on clause'
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'sdf' at line 1
+mysql> insert into emp values(1010,'vikas','duchal',103,1005,30000);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select *from emp;
++-------+--------+-----------+--------+-------+----------+
+| empid | fname  | lname     | deptid | mrgid | salary   |
++-------+--------+-----------+--------+-------+----------+
+|  1001 | steven | king      |    105 |  NULL | 50000.00 |
+|  1002 | neena  | kochhar   |    105 |  1003 | 40000.00 |
+|  1003 | nancy  | greenberg |    102 |  1001 | 35000.00 |
+|  1004 | andrew | lusk      |    101 |  1002 | 15000.00 |
+|  1005 | pamela | davis     |   NULL |  1002 | 14000.00 |
+|  1006 | andy   | hillman   |    105 |  1001 | 30000.00 |
+|  1007 | rene   | lopez     |    105 |  1001 | 18000.00 |
+|  1008 | tanya  | rff       |    105 |  1001 | 10000.00 |
+|  1009 | sue    | fisher    |    105 |  1001 | 11000.00 |
+|  1010 | vikas  | duchal    |    103 |  1005 | 30000.00 |
++-------+--------+-----------+--------+-------+----------+
+10 rows in set (0.00 sec)
+
+mysql> select concat(e1.fname,' ',e1.lname)as empname,e1.salary,count(distinct e2.salary) as rowcnt from emp e1 inner join emp e2 on e1.salary<=e2.salary group by e1.salary, concat(e1.fname,' ',e1.lname) having count(distinct e2.salary)=4;
++--------------+----------+--------+
+| empname      | salary   | rowcnt |
++--------------+----------+--------+
+| andy hillman | 30000.00 |      4 |
+| vikas duchal | 30000.00 |      4 |
++--------------+----------+--------+
+2 rows in set (0.00 sec)
+
+mysql>
